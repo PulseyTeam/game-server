@@ -4,11 +4,9 @@ RUN apk update && apk add --no-cache git
 
 WORKDIR /go/src/app
 
-COPY go.* ./
-
-RUN go mod download
-
 COPY . .
+
+RUN go get .
 
 RUN go build -o server .
 
