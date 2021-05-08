@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package pulsey.protobuf;
+
+option go_package="./";
+option csharp_namespace = "MultiplayerService";
+
+service MultiplayerService {
+  rpc SetPosition(SetPositionRequest) returns (SetPositionResponse);
+  rpc GetPositions(GetPositionsRequest) returns (GetPlayerPositions);
+  rpc BiDirectSetPositions(stream SetPositionRequest) returns (stream GetPlayerPositions);
+}
+
+message SetPositionRequest{
+  string name = 1;
+  double x = 2;
+  double y = 3;
+}
+
+message GetPlayerPositions{
+  repeated PlayerPosition players = 1;
+}
+
+message PlayerPosition{
+  string name = 1;
+  double x = 2;
+  double y = 3;
+}
+
+message SetPositionResponse{
+  bool Success = 1;
+}
+
+message GetPositionsRequest{
+  string GameRoomId = 1;
+}
