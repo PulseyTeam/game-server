@@ -17,6 +17,10 @@ type server struct {
 }
 
 func (s *server) SetPosition(ctx context.Context, request *pb.SetPositionRequest) (*pb.SetPositionResponse, error) {
+	if s.players == nil {
+		s.players = make(map[string]*pb.PlayerPosition)
+	}
+
 	s.players[request.GetName()] = &pb.PlayerPosition{
 		Name: request.GetName(),
 		X:    request.GetX(),
@@ -39,6 +43,10 @@ func (s *server) GetPositions(ctx context.Context, request *pb.GetPositionsReque
 }
 
 func (s *server) BiDirectSetPositions(stream pb.MultiplayerService_BiDirectSetPositionsServer) error {
+	if s.players == nil {
+		s.players = make(map[string]*pb.PlayerPosition)
+	}
+
 	for {
 		request, err := stream.Recv()
 		if err != nil {
