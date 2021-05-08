@@ -1,7 +1,8 @@
-version: '3.6'
+version: "3.9"
 
 services:
   server:
     build: .
+    image: pulsey-game-server:latest
     ports:
-      - '3000:3000'
+      - "3000:3000"

@@ -1,13 +1,23 @@
-FROM golang:1.16-alpine
+FROM golang:1.16-alpine as builder
 
 RUN apk update && apk add --no-cache git
 
 WORKDIR /go/src/app
 
+COPY go.* ./
+
+RUN go mod download
+
 COPY . .
 
-RUN go get .
+RUN go build -o server .
 
-ENTRYPOINT go run main.go
+FROM alpine:latest as deploy
+
+WORKDIR /root/
+
+COPY --from=builder /go/src/app/server .
 
 EXPOSE 3000
+
+ENTRYPOINT ["./server"]
