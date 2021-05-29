@@ -1,9 +1,8 @@
 name: Build and Deploy to Cloud Run
 
 on:
-  push:
-    branches: [master]
   release:
+    branches: [master]
     types: [created]
 
 env:
