@@ -46,3 +46,14 @@ jobs:
       - name: Publish
         run: |-
           docker push "gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}"
+
+      # Deploy to Google Cloud Run
+      - name: Deploy
+        run: |-
+          gcloud run deploy ${{ secrets.GCP_SERVICE_NAME }} \
+          --image "gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}" \
+          --region europe-west3 \
+          --port 3000 \
+          --use-http2 \
+          --allow-unauthenticated \
+          --platform managed
