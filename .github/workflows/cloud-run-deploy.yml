@@ -18,6 +18,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Get git tags
+      - name: Get Version
+        id: vars
+        run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10})
+
       # Setup gcloud CLI
       - uses: google-github-actions/setup-gcloud@v0.2.0
         with:
@@ -33,12 +38,10 @@ jobs:
       - name: Build
         run: |-
           docker build \
-            --tag "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
-            --build-arg GITHUB_REF="$GITHUB_REF" \
+            --tag "gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}" \
             .
 
       # Push the Docker image to Google Container Registry
       - name: Publish
         run: |-
-          docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
+          docker push "gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}"
