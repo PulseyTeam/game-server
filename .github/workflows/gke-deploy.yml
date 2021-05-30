@@ -68,7 +68,7 @@ jobs:
       - name: Deploy
         run: |-
           cd .kubernetes
-          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}
-          ./kustomize build . | kubectl apply -f -
+          ../kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:${{ steps.vars.outputs.tag }}
+          ../kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/$DEPLOYMENT_NAME
           kubectl get services -o wide
