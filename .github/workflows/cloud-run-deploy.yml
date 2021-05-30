@@ -56,4 +56,5 @@ jobs:
           --port 3000 \
           --use-http2 \
           --allow-unauthenticated \
-          --platform managed
+          --platform managed \
+          --quiet
