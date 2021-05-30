@@ -15,7 +15,7 @@ spec:
       containers:
         - name: game-server-app
           image: gcr.io/PROJECT_ID/IMAGE:TAG
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           readinessProbe:
