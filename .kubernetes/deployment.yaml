@@ -21,10 +21,10 @@ spec:
           readinessProbe:
             tcpSocket:
               port: 3000
-            initialDelaySeconds: 15
-            periodSeconds: 30
+            initialDelaySeconds: 3
+            periodSeconds: 5
           livenessProbe:
             tcpSocket:
               port: 3000
-            initialDelaySeconds: 15
-            periodSeconds: 60
+            initialDelaySeconds: 3
+            periodSeconds: 5
