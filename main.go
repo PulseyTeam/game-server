@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	pb "github.com/PulseyTeam/game-server/proto"
@@ -16,36 +15,12 @@ type server struct {
 	players map[string]*pb.PlayerPosition
 }
 
-func (s *server) SetPosition(ctx context.Context, request *pb.SetPositionRequest) (*pb.SetPositionResponse, error) {
-	if s.players == nil {
-		s.players = make(map[string]*pb.PlayerPosition)
-	}
-
-	s.players[request.GetName()] = &pb.PlayerPosition{
-		Name: request.GetName(),
-		X:    request.GetX(),
-		Y:    request.GetY(),
-	}
-
-	log.Printf("SetPosition: %v -> %v, %v", request.GetName(), request.GetX(), request.GetY())
-
-	return &pb.SetPositionResponse{Success: true}, nil
-}
-
-func (s *server) GetPositions(ctx context.Context, request *pb.GetPositionsRequest) (*pb.GetPlayerPositions, error) {
-	currentPlayers := make([]*pb.PlayerPosition, 0, len(s.players))
-
-	for _, player := range s.players {
-		currentPlayers = append(currentPlayers, player)
-	}
-
-	return &pb.GetPlayerPositions{Players: currentPlayers}, nil
-}
-
 func (s *server) BiDirectSetPositions(stream pb.MultiplayerService_BiDirectSetPositionsServer) error {
 	if s.players == nil {
 		s.players = make(map[string]*pb.PlayerPosition)
 	}
+
+	var tickCounter uint64 = 0
 
 	for {
 		request, err := stream.Recv()
@@ -56,12 +31,17 @@ func (s *server) BiDirectSetPositions(stream pb.MultiplayerService_BiDirectSetPo
 			return err
 		}
 
+		tickCounter++
+
 		s.players[request.GetName()] = &pb.PlayerPosition{
 			Name: request.GetName(),
 			X:    request.GetX(),
 			Y:    request.GetY(),
 		}
-		log.Printf("SetPosition: %v -> %v, %v", request.GetName(), request.GetX(), request.GetY())
+
+		if (tickCounter % 20) == 0 {
+			log.Printf("New Position: %v (%v, %v)", request.GetName(), request.GetX(), request.GetY())
+		}
 
 		currentPlayers := make([]*pb.PlayerPosition, 0, len(s.players))
 		for _, player := range s.players {
