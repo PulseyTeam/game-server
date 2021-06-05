@@ -2,35 +2,42 @@ syntax = "proto3";
 
 package pulsey.protobuf;
 
-option go_package="./";
+option go_package="./;proto";
 option csharp_namespace = "MultiplayerService";
 
 service MultiplayerService {
-  rpc SetPosition(SetPositionRequest) returns (SetPositionResponse);
-  rpc GetPositions(GetPositionsRequest) returns (GetPlayerPositions);
-  rpc BiDirectSetPositions(stream SetPositionRequest) returns (stream GetPlayerPositions);
+  rpc RoomConnect(RoomConnectRequest) returns (RoomConnectResponse);
+  rpc RoomStream(stream RoomStreamRequest) returns (stream RoomStreamResponse);
 }
 
-message SetPositionRequest{
-  string name = 1;
-  double x = 2;
-  double y = 3;
+message Player {
+  string id = 1;
+  string name = 2;
+  Coordinate position = 3;
+  Direction direction = 5;
 }
 
-message GetPlayerPositions{
-  repeated PlayerPosition players = 1;
+message Coordinate {
+  float x = 1;
+  float y = 2;
 }
 
-message PlayerPosition{
-  string name = 1;
-  double x = 2;
-  double y = 3;
+enum Direction {
+  UP = 0;
+  DOWN = 1;
+  LEFT = 2;
+  RIGHT = 3;
+  STOP = 4;
 }
 
-message SetPositionResponse{
-  bool Success = 1;
+message RoomStreamRequest {
+  Player player = 1;
+  uint64 room_id = 2;
 }
 
-message GetPositionsRequest{
-  string GameRoomId = 1;
+message RoomStreamResponse {
+  repeated Player players = 1;
 }
+
+message RoomConnectRequest{}
+message RoomConnectResponse{}
