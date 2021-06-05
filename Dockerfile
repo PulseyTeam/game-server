@@ -12,7 +12,7 @@ RUN go build -o server .
 
 FROM alpine:latest as deploy
 
-WORKDIR /root/
+WORKDIR /app/
 
 COPY --from=builder /go/src/app/server .
 
