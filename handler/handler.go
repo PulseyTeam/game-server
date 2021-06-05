@@ -6,7 +6,7 @@ import (
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms map[int64]*pb.Player
+	rooms map[uint64]*pb.RoomStreamRequest
 }
 
 func NewMultiplayer() *MultiplayerHandler {

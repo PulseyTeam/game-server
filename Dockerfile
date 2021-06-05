@@ -10,7 +10,7 @@ RUN go get .
 
 RUN go build -o server .
 
-FROM alpine:latest as deploy
+FROM alpine:latest as alpine
 
 WORKDIR /app/
 
