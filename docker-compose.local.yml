@@ -6,6 +6,8 @@ services:
     image: pulsey-game-server:latest
     ports:
       - "3000:3000"
+    environment:
+      DOCKER_ENVIRONMENT: 1
     depends_on:
       - mongo
 
@@ -13,8 +15,8 @@ services:
     image: mongo:4.4-bionic
     restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pulsey
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
     ports:
       - "27017:27017"
     volumes:
@@ -26,8 +28,8 @@ services:
     ports:
       - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: pulsey
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
     depends_on:
       - mongo
 

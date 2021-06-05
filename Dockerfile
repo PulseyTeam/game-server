@@ -2,7 +2,7 @@ FROM golang:1.16-alpine as builder
 
 RUN apk update && apk add --no-cache git
 
-WORKDIR /go/src/app
+WORKDIR /build
 
 COPY . .
 
@@ -14,7 +14,9 @@ FROM alpine:latest as alpine
 
 WORKDIR /app/
 
-COPY --from=builder /go/src/app/server .
+COPY ./config ./config
+
+COPY --from=builder /build/server .
 
 EXPOSE 3000
 
