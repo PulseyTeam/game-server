@@ -8,6 +8,7 @@ data:
     Server:
       Port: 3000
       Development: true
+      LogLevel: -1
     MongoDB:
       URI: "mongodb://localhost:27017"
       User: "admin"

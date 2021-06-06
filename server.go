@@ -6,8 +6,8 @@ import (
 	"github.com/PulseyTeam/game-server/config"
 	"github.com/PulseyTeam/game-server/database"
 	"github.com/PulseyTeam/game-server/handler"
+	"github.com/PulseyTeam/game-server/jwt"
 	pb "github.com/PulseyTeam/game-server/proto"
-	"github.com/PulseyTeam/game-server/service"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
@@ -16,15 +16,17 @@ import (
 	"time"
 )
 
-const (
-	secretKey     = "pulsey-secret"
-	tokenDuration = 4 * time.Hour
-)
-
 func main() {
-	consoleWriter := zerolog.ConsoleWriter{Out: os.Stderr}
-	consoleWriter.TimeFormat = time.RFC3339
-	log.Logger = zerolog.New(consoleWriter).With().Timestamp().Caller().Logger()
+	if os.Getenv("KUBERNETES_PORT") != "" {
+		zerolog.LevelFieldName = "severity"
+		zerolog.TimestampFieldName = "timestamp"
+		zerolog.TimeFieldFormat = time.RFC3339Nano
+		log.Logger = log.With().Logger()
+	} else {
+		consoleWriter := zerolog.ConsoleWriter{Out: os.Stderr}
+		consoleWriter.TimeFormat = time.RFC3339
+		log.Logger = zerolog.New(consoleWriter).With().Timestamp().Caller().Logger()
+	}
 
 	log.Info().Msg("starting server...")
 
@@ -49,7 +51,7 @@ func main() {
 	}()
 	log.Info().Msgf("mongodb connected: %v", mongoDBConn.NumberSessionsInProgress())
 
-	jwtManager := service.NewJWTManager(secretKey, tokenDuration)
+	jwtManager := jwt.NewManager()
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(unaryInterceptor), grpc.StreamInterceptor(streamInterceptor))
 	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayerHandler(cfg, mongoDBConn, jwtManager))

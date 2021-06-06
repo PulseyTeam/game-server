@@ -6,12 +6,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const UserCollection = "users"
+
 type User struct {
 	ID        primitive.ObjectID `bson:"_id"`
-	Username  string             `json:"username"`
-	Password  string             `json:"password"`
-	Settings  *[]string          `json:"settings"`
-	Cosmetics *[]string          `json:"cosmetics"`
+	Username  string             `bson:"username"`
+	Password  string             `bson:"password"`
+	Settings  *[]string          `bson:"settings"`
+	Cosmetics *[]string          `bson:"cosmetics"`
 }
 
 func (u *User) HashPassword() error {

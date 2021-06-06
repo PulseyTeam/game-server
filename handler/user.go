@@ -12,8 +12,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (h *AuthHandler) Login(ctx context.Context, request *pb.LoginRequest) (*pb.LoginResponse, error) {
-	collection := h.mongoDB.Database(h.cfg.MongoDB.DB).Collection("users")
+func (a *AuthHandler) Login(ctx context.Context, request *pb.LoginRequest) (*pb.LoginResponse, error) {
+	collection := a.mongoDB.Database(a.cfg.MongoDB.DB).Collection(model.UserCollection)
 
 	findUser := &model.User{}
 	filter := bson.D{primitive.E{Key: "username", Value: request.GetUsername()}}
@@ -29,7 +29,7 @@ func (h *AuthHandler) Login(ctx context.Context, request *pb.LoginRequest) (*pb.
 		return nil, status.Errorf(codes.Unauthenticated, "authentication failed")
 	}
 
-	accessToken, err := h.jwtManager.Generate(findUser)
+	accessToken, err := a.jwtManager.Generate(findUser)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "cannot generate access token")
 	}
@@ -37,8 +37,8 @@ func (h *AuthHandler) Login(ctx context.Context, request *pb.LoginRequest) (*pb.
 	return &pb.LoginResponse{AccessToken: accessToken}, nil
 }
 
-func (h *AuthHandler) Register(ctx context.Context, request *pb.RegisterRequest) (*pb.RegisterResponse, error) {
-	collection := h.mongoDB.Database(h.cfg.MongoDB.DB).Collection("users")
+func (a *AuthHandler) Register(ctx context.Context, request *pb.RegisterRequest) (*pb.RegisterResponse, error) {
+	collection := a.mongoDB.Database(a.cfg.MongoDB.DB).Collection(model.UserCollection)
 
 	findUser := model.User{}
 	filter := bson.D{primitive.E{Key: "username", Value: request.GetUsername()}}
@@ -67,7 +67,7 @@ func (h *AuthHandler) Register(ctx context.Context, request *pb.RegisterRequest)
 		return nil, status.Errorf(codes.Internal, "failed to create resource")
 	}
 
-	accessToken, err := h.jwtManager.Generate(newUser)
+	accessToken, err := a.jwtManager.Generate(newUser)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "cannot generate access token")
 	}

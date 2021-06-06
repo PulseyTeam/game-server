@@ -14,17 +14,17 @@ import (
 )
 
 func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomConnectRequest) (*pb.RoomConnectResponse, error) {
-	collection := h.mongoDB.Database(h.cfg.MongoDB.DB).Collection("game_sessions")
+	collection := h.mongoDB.Database(h.cfg.MongoDB.DB).Collection(model.GameSessionCollection)
 
 	gameSession := model.GameSession{}
 	filter := bson.D{
 		primitive.E{Key: "map_id", Value: request.GetMapId()},
-		primitive.E{Key: "status", Value: model.SessionWaiting},
+		primitive.E{Key: "status", Value: model.StatusWaiting},
 	}
 
 	err := collection.FindOne(ctx, filter).Decode(&gameSession)
 	if err == nil {
-		return &pb.RoomConnectResponse{RoomId: gameSession.ID.String()}, nil
+		return &pb.RoomConnectResponse{RoomId: gameSession.ID.Hex()}, nil
 	} else {
 		//Todo refactor
 		log.Warn().Msgf("find error: %v", err)
@@ -33,7 +33,7 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 	result, err := collection.InsertOne(ctx, model.GameSession{
 		ID:         primitive.NewObjectID(),
 		MapID:      request.GetMapId(),
-		Status:     model.SessionWaiting,
+		Status:     model.StatusWaiting,
 		StartedAt:  time.Now(),
 		FinishedAt: nil,
 	})
@@ -41,9 +41,9 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 		return nil, status.Errorf(codes.Internal, "failed to create resource")
 	}
 
-	insertedID := result.InsertedID.(primitive.ObjectID).String()
+	insertedID := result.InsertedID.(primitive.ObjectID).Hex()
 
-	log.Trace().Msgf("game session (created): %v", insertedID)
+	log.Trace().Msgf("game session created: %v", insertedID)
 
 	return &pb.RoomConnectResponse{RoomId: insertedID}, nil
 }

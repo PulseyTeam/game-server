@@ -1,4 +1,4 @@
-package service
+package jwt
 
 import (
 	"fmt"
@@ -7,7 +7,12 @@ import (
 	"time"
 )
 
-type JWTManager struct {
+const (
+	secretKey     = "0pPeA3tn0BUesH9dtjptZsZpuYHZtCDFqUFH7EdiVw4U8APE6uTNg53LXqq1EAa"
+	tokenDuration = 4 * time.Hour
+)
+
+type Manager struct {
 	secretKey     string
 	tokenDuration time.Duration
 }
@@ -17,14 +22,15 @@ type UserClaims struct {
 	Username string `json:"username"`
 }
 
-func NewJWTManager(secretKey string, tokenDuration time.Duration) *JWTManager {
-	return &JWTManager{secretKey, tokenDuration}
+func NewManager() *Manager {
+	return &Manager{secretKey, tokenDuration}
 }
 
-func (manager *JWTManager) Generate(user *model.User) (string, error) {
+func (manager *Manager) Generate(user *model.User) (string, error) {
 	claims := UserClaims{
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(manager.tokenDuration).Unix(),
+			IssuedAt:  time.Now().Unix(),
 			Subject:   user.ID.Hex(),
 		},
 		Username: user.Username,
@@ -34,7 +40,7 @@ func (manager *JWTManager) Generate(user *model.User) (string, error) {
 	return token.SignedString([]byte(manager.secretKey))
 }
 
-func (manager *JWTManager) Verify(accessToken string) (*UserClaims, error) {
+func (manager *Manager) Verify(accessToken string) (*UserClaims, error) {
 	token, err := jwt.ParseWithClaims(
 		accessToken,
 		&UserClaims{},

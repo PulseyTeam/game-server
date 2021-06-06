@@ -5,17 +5,19 @@ import (
 	"time"
 )
 
-const (
-	SessionWaiting  = "waiting"
-	SessionReady    = "ready"
-	SessionPlaying  = "playing"
-	SessionFinished = "finished"
-)
+const GameSessionCollection = "game_sessions"
 
 type GameSession struct {
 	ID         primitive.ObjectID `bson:"_id"`
-	MapID      string             `json:"map_id"`
-	Status     string             `json:"status"`
-	StartedAt  time.Time          `json:"started_at"`
-	FinishedAt *time.Time         `json:"finished_at"`
+	MapID      string             `bson:"map_id"`
+	Status     string             `bson:"status"`
+	StartedAt  time.Time          `bson:"started_at"`
+	FinishedAt *time.Time         `bson:"finished_at"`
 }
+
+const (
+	StatusWaiting  = "waiting"
+	StatusReady    = "ready"
+	StatusPlaying  = "playing"
+	StatusFinished = "finished"
+)
