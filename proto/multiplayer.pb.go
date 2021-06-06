@@ -201,19 +201,113 @@ func (x *Coordinate) GetY() float32 {
 	return 0
 }
 
+type RoomConnectRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MapId string `protobuf:"bytes,1,opt,name=map_id,json=mapId,proto3" json:"map_id,omitempty"`
+}
+
+func (x *RoomConnectRequest) Reset() {
+	*x = RoomConnectRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_multiplayer_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RoomConnectRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoomConnectRequest) ProtoMessage() {}
+
+func (x *RoomConnectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_multiplayer_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoomConnectRequest.ProtoReflect.Descriptor instead.
+func (*RoomConnectRequest) Descriptor() ([]byte, []int) {
+	return file_proto_multiplayer_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RoomConnectRequest) GetMapId() string {
+	if x != nil {
+		return x.MapId
+	}
+	return ""
+}
+
+type RoomConnectResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	RoomId string `protobuf:"bytes,1,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+}
+
+func (x *RoomConnectResponse) Reset() {
+	*x = RoomConnectResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_multiplayer_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *RoomConnectResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RoomConnectResponse) ProtoMessage() {}
+
+func (x *RoomConnectResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_multiplayer_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RoomConnectResponse.ProtoReflect.Descriptor instead.
+func (*RoomConnectResponse) Descriptor() ([]byte, []int) {
+	return file_proto_multiplayer_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *RoomConnectResponse) GetRoomId() string {
+	if x != nil {
+		return x.RoomId
+	}
+	return ""
+}
+
 type RoomStreamRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	Player *Player `protobuf:"bytes,1,opt,name=player,proto3" json:"player,omitempty"`
-	RoomId uint64  `protobuf:"varint,2,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
+	RoomId string  `protobuf:"bytes,2,opt,name=room_id,json=roomId,proto3" json:"room_id,omitempty"`
 }
 
 func (x *RoomStreamRequest) Reset() {
 	*x = RoomStreamRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_multiplayer_proto_msgTypes[2]
+		mi := &file_proto_multiplayer_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -226,7 +320,7 @@ func (x *RoomStreamRequest) String() string {
 func (*RoomStreamRequest) ProtoMessage() {}
 
 func (x *RoomStreamRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_multiplayer_proto_msgTypes[2]
+	mi := &file_proto_multiplayer_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -239,7 +333,7 @@ func (x *RoomStreamRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomStreamRequest.ProtoReflect.Descriptor instead.
 func (*RoomStreamRequest) Descriptor() ([]byte, []int) {
-	return file_proto_multiplayer_proto_rawDescGZIP(), []int{2}
+	return file_proto_multiplayer_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *RoomStreamRequest) GetPlayer() *Player {
@@ -249,11 +343,11 @@ func (x *RoomStreamRequest) GetPlayer() *Player {
 	return nil
 }
 
-func (x *RoomStreamRequest) GetRoomId() uint64 {
+func (x *RoomStreamRequest) GetRoomId() string {
 	if x != nil {
 		return x.RoomId
 	}
-	return 0
+	return ""
 }
 
 type RoomStreamResponse struct {
@@ -267,7 +361,7 @@ type RoomStreamResponse struct {
 func (x *RoomStreamResponse) Reset() {
 	*x = RoomStreamResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_multiplayer_proto_msgTypes[3]
+		mi := &file_proto_multiplayer_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -280,7 +374,7 @@ func (x *RoomStreamResponse) String() string {
 func (*RoomStreamResponse) ProtoMessage() {}
 
 func (x *RoomStreamResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_multiplayer_proto_msgTypes[3]
+	mi := &file_proto_multiplayer_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -293,7 +387,7 @@ func (x *RoomStreamResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RoomStreamResponse.ProtoReflect.Descriptor instead.
 func (*RoomStreamResponse) Descriptor() ([]byte, []int) {
-	return file_proto_multiplayer_proto_rawDescGZIP(), []int{3}
+	return file_proto_multiplayer_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *RoomStreamResponse) GetPlayers() []*Player {
@@ -301,82 +395,6 @@ func (x *RoomStreamResponse) GetPlayers() []*Player {
 		return x.Players
 	}
 	return nil
-}
-
-type RoomConnectRequest struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *RoomConnectRequest) Reset() {
-	*x = RoomConnectRequest{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_multiplayer_proto_msgTypes[4]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RoomConnectRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RoomConnectRequest) ProtoMessage() {}
-
-func (x *RoomConnectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_multiplayer_proto_msgTypes[4]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RoomConnectRequest.ProtoReflect.Descriptor instead.
-func (*RoomConnectRequest) Descriptor() ([]byte, []int) {
-	return file_proto_multiplayer_proto_rawDescGZIP(), []int{4}
-}
-
-type RoomConnectResponse struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *RoomConnectResponse) Reset() {
-	*x = RoomConnectResponse{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_multiplayer_proto_msgTypes[5]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *RoomConnectResponse) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*RoomConnectResponse) ProtoMessage() {}
-
-func (x *RoomConnectResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_multiplayer_proto_msgTypes[5]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use RoomConnectResponse.ProtoReflect.Descriptor instead.
-func (*RoomConnectResponse) Descriptor() ([]byte, []int) {
-	return file_proto_multiplayer_proto_rawDescGZIP(), []int{5}
 }
 
 var File_proto_multiplayer_proto protoreflect.FileDescriptor
@@ -397,20 +415,23 @@ var file_proto_multiplayer_proto_rawDesc = []byte{
 	0x6e, 0x52, 0x09, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x28, 0x0a, 0x0a,
 	0x43, 0x6f, 0x6f, 0x72, 0x64, 0x69, 0x6e, 0x61, 0x74, 0x65, 0x12, 0x0c, 0x0a, 0x01, 0x78, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x02, 0x52, 0x01, 0x78, 0x12, 0x0c, 0x0a, 0x01, 0x79, 0x18, 0x02, 0x20,
-	0x01, 0x28, 0x02, 0x52, 0x01, 0x79, 0x22, 0x5d, 0x0a, 0x11, 0x52, 0x6f, 0x6f, 0x6d, 0x53, 0x74,
-	0x72, 0x65, 0x61, 0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2f, 0x0a, 0x06, 0x70,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x70, 0x75,
-	0x6c, 0x73, 0x65, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50, 0x6c,
-	0x61, 0x79, 0x65, 0x72, 0x52, 0x06, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07,
-	0x72, 0x6f, 0x6f, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x06, 0x72,
-	0x6f, 0x6f, 0x6d, 0x49, 0x64, 0x22, 0x47, 0x0a, 0x12, 0x52, 0x6f, 0x6f, 0x6d, 0x53, 0x74, 0x72,
-	0x65, 0x61, 0x6d, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x07, 0x70,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x70,
-	0x75, 0x6c, 0x73, 0x65, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50,
-	0x6c, 0x61, 0x79, 0x65, 0x72, 0x52, 0x07, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x22, 0x14,
-	0x0a, 0x12, 0x52, 0x6f, 0x6f, 0x6d, 0x43, 0x6f, 0x6e, 0x6e, 0x65, 0x63, 0x74, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x15, 0x0a, 0x13, 0x52, 0x6f, 0x6f, 0x6d, 0x43, 0x6f, 0x6e, 0x6e,
-	0x65, 0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2a, 0x3c, 0x0a, 0x09, 0x44,
+	0x01, 0x28, 0x02, 0x52, 0x01, 0x79, 0x22, 0x2b, 0x0a, 0x12, 0x52, 0x6f, 0x6f, 0x6d, 0x43, 0x6f,
+	0x6e, 0x6e, 0x65, 0x63, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x15, 0x0a, 0x06,
+	0x6d, 0x61, 0x70, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x6d, 0x61,
+	0x70, 0x49, 0x64, 0x22, 0x2e, 0x0a, 0x13, 0x52, 0x6f, 0x6f, 0x6d, 0x43, 0x6f, 0x6e, 0x6e, 0x65,
+	0x63, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x72, 0x6f,
+	0x6f, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x6f, 0x6f,
+	0x6d, 0x49, 0x64, 0x22, 0x5d, 0x0a, 0x11, 0x52, 0x6f, 0x6f, 0x6d, 0x53, 0x74, 0x72, 0x65, 0x61,
+	0x6d, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2f, 0x0a, 0x06, 0x70, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x70, 0x75, 0x6c, 0x73, 0x65,
+	0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50, 0x6c, 0x61, 0x79, 0x65,
+	0x72, 0x52, 0x06, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x12, 0x17, 0x0a, 0x07, 0x72, 0x6f, 0x6f,
+	0x6d, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x72, 0x6f, 0x6f, 0x6d,
+	0x49, 0x64, 0x22, 0x47, 0x0a, 0x12, 0x52, 0x6f, 0x6f, 0x6d, 0x53, 0x74, 0x72, 0x65, 0x61, 0x6d,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x31, 0x0a, 0x07, 0x70, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x70, 0x75, 0x6c, 0x73,
+	0x65, 0x79, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x50, 0x6c, 0x61, 0x79,
+	0x65, 0x72, 0x52, 0x07, 0x70, 0x6c, 0x61, 0x79, 0x65, 0x72, 0x73, 0x2a, 0x3c, 0x0a, 0x09, 0x44,
 	0x69, 0x72, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x06, 0x0a, 0x02, 0x55, 0x50, 0x10, 0x00,
 	0x12, 0x08, 0x0a, 0x04, 0x44, 0x4f, 0x57, 0x4e, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x4c, 0x45,
 	0x46, 0x54, 0x10, 0x02, 0x12, 0x09, 0x0a, 0x05, 0x52, 0x49, 0x47, 0x48, 0x54, 0x10, 0x03, 0x12,
@@ -450,20 +471,20 @@ var file_proto_multiplayer_proto_goTypes = []interface{}{
 	(Direction)(0),              // 0: pulsey.protobuf.Direction
 	(*Player)(nil),              // 1: pulsey.protobuf.Player
 	(*Coordinate)(nil),          // 2: pulsey.protobuf.Coordinate
-	(*RoomStreamRequest)(nil),   // 3: pulsey.protobuf.RoomStreamRequest
-	(*RoomStreamResponse)(nil),  // 4: pulsey.protobuf.RoomStreamResponse
-	(*RoomConnectRequest)(nil),  // 5: pulsey.protobuf.RoomConnectRequest
-	(*RoomConnectResponse)(nil), // 6: pulsey.protobuf.RoomConnectResponse
+	(*RoomConnectRequest)(nil),  // 3: pulsey.protobuf.RoomConnectRequest
+	(*RoomConnectResponse)(nil), // 4: pulsey.protobuf.RoomConnectResponse
+	(*RoomStreamRequest)(nil),   // 5: pulsey.protobuf.RoomStreamRequest
+	(*RoomStreamResponse)(nil),  // 6: pulsey.protobuf.RoomStreamResponse
 }
 var file_proto_multiplayer_proto_depIdxs = []int32{
 	2, // 0: pulsey.protobuf.Player.position:type_name -> pulsey.protobuf.Coordinate
 	0, // 1: pulsey.protobuf.Player.direction:type_name -> pulsey.protobuf.Direction
 	1, // 2: pulsey.protobuf.RoomStreamRequest.player:type_name -> pulsey.protobuf.Player
 	1, // 3: pulsey.protobuf.RoomStreamResponse.players:type_name -> pulsey.protobuf.Player
-	5, // 4: pulsey.protobuf.MultiplayerService.RoomConnect:input_type -> pulsey.protobuf.RoomConnectRequest
-	3, // 5: pulsey.protobuf.MultiplayerService.RoomStream:input_type -> pulsey.protobuf.RoomStreamRequest
-	6, // 6: pulsey.protobuf.MultiplayerService.RoomConnect:output_type -> pulsey.protobuf.RoomConnectResponse
-	4, // 7: pulsey.protobuf.MultiplayerService.RoomStream:output_type -> pulsey.protobuf.RoomStreamResponse
+	3, // 4: pulsey.protobuf.MultiplayerService.RoomConnect:input_type -> pulsey.protobuf.RoomConnectRequest
+	5, // 5: pulsey.protobuf.MultiplayerService.RoomStream:input_type -> pulsey.protobuf.RoomStreamRequest
+	4, // 6: pulsey.protobuf.MultiplayerService.RoomConnect:output_type -> pulsey.protobuf.RoomConnectResponse
+	6, // 7: pulsey.protobuf.MultiplayerService.RoomStream:output_type -> pulsey.protobuf.RoomStreamResponse
 	6, // [6:8] is the sub-list for method output_type
 	4, // [4:6] is the sub-list for method input_type
 	4, // [4:4] is the sub-list for extension type_name
@@ -502,30 +523,6 @@ func file_proto_multiplayer_proto_init() {
 			}
 		}
 		file_proto_multiplayer_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RoomStreamRequest); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_multiplayer_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RoomStreamResponse); i {
-			case 0:
-				return &v.state
-			case 1:
-				return &v.sizeCache
-			case 2:
-				return &v.unknownFields
-			default:
-				return nil
-			}
-		}
-		file_proto_multiplayer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RoomConnectRequest); i {
 			case 0:
 				return &v.state
@@ -537,8 +534,32 @@ func file_proto_multiplayer_proto_init() {
 				return nil
 			}
 		}
-		file_proto_multiplayer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_proto_multiplayer_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RoomConnectResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_multiplayer_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RoomStreamRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_proto_multiplayer_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*RoomStreamResponse); i {
 			case 0:
 				return &v.state
 			case 1:

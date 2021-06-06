@@ -1,14 +1,18 @@
 package handler
 
 import (
+	"github.com/PulseyTeam/game-server/config"
 	pb "github.com/PulseyTeam/game-server/proto"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms map[uint64]*pb.RoomStreamRequest
+	rooms   map[string]*pb.RoomStreamRequest
+	mongoDB *mongo.Client
+	cfg     *config.Config
 }
 
-func NewMultiplayer() *MultiplayerHandler {
-	return &MultiplayerHandler{}
+func NewMultiplayer(cfg *config.Config, mongoDB *mongo.Client) *MultiplayerHandler {
+	return &MultiplayerHandler{cfg: cfg, mongoDB: mongoDB}
 }

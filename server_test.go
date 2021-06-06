@@ -52,7 +52,7 @@ func TestRoomStream(t *testing.T) {
 		"ok": {
 			in: &pb.RoomStreamRequest{
 				Player: &pb.Player{Id: "1", Name: "RexiusTR", Position: &pb.Coordinate{X: 66, Y: 87}, Direction: pb.Direction_STOP},
-				RoomId: 500,
+				RoomId: "60bc207d46ff230141a72b71",
 			},
 			expected: expectation{
 				count: 50,
