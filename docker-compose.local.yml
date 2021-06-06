@@ -1,15 +1,15 @@
 version: "3.9"
 
 services:
-  server:
-    build: .
-    image: pulsey-game-server:latest
-    ports:
-      - "3000:3000"
-    environment:
-      DOCKER_ENVIRONMENT: 1
-    depends_on:
-      - mongo
+#  server:
+#    build: .
+#    image: pulsey-game-server:latest
+#    ports:
+#      - "3000:3000"
+#    environment:
+#      DOCKER_ENVIRONMENT: 1
+#    depends_on:
+#      - mongo
 
   mongo:
     image: mongo:4.4-bionic

@@ -1,10 +1,9 @@
 package config
 
 import (
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
-	"log"
 	"os"
-	"time"
 )
 
 type Config struct {
@@ -14,13 +13,9 @@ type Config struct {
 }
 
 type Server struct {
-	Port              string
-	Development       bool
-	Timeout           time.Duration
-	ReadTimeout       time.Duration
-	WriteTimeout      time.Duration
-	MaxConnectionIdle time.Duration
-	MaxConnectionAge  time.Duration
+	Port        string
+	Development bool
+	LogLevel    int8
 }
 
 type MongoDB struct {
@@ -54,7 +49,7 @@ func ParseConfig() (*Config, error) {
 	var c Config
 	err := viper.Unmarshal(&c)
 	if err != nil {
-		log.Printf("unable to decode into struct, %v", err)
+		log.Fatal().Err(err).Send()
 		return nil, err
 	}
 

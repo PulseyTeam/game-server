@@ -32,7 +32,7 @@ func NewMultiplayerServiceClient(cc grpc.ClientConnInterface) MultiplayerService
 
 func (c *multiplayerServiceClient) RoomConnect(ctx context.Context, in *RoomConnectRequest, opts ...grpc.CallOption) (*RoomConnectResponse, error) {
 	out := new(RoomConnectResponse)
-	err := c.cc.Invoke(ctx, "/pulsey.protobuf.MultiplayerService/RoomConnect", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/MultiplayerService/RoomConnect", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (c *multiplayerServiceClient) RoomConnect(ctx context.Context, in *RoomConn
 }
 
 func (c *multiplayerServiceClient) RoomStream(ctx context.Context, opts ...grpc.CallOption) (MultiplayerService_RoomStreamClient, error) {
-	stream, err := c.cc.NewStream(ctx, &MultiplayerService_ServiceDesc.Streams[0], "/pulsey.protobuf.MultiplayerService/RoomStream", opts...)
+	stream, err := c.cc.NewStream(ctx, &MultiplayerService_ServiceDesc.Streams[0], "/MultiplayerService/RoomStream", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +112,7 @@ func _MultiplayerService_RoomConnect_Handler(srv interface{}, ctx context.Contex
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pulsey.protobuf.MultiplayerService/RoomConnect",
+		FullMethod: "/MultiplayerService/RoomConnect",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MultiplayerServiceServer).RoomConnect(ctx, req.(*RoomConnectRequest))
@@ -150,7 +150,7 @@ func (x *multiplayerServiceRoomStreamServer) Recv() (*RoomStreamRequest, error) 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var MultiplayerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pulsey.protobuf.MultiplayerService",
+	ServiceName: "MultiplayerService",
 	HandlerType: (*MultiplayerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

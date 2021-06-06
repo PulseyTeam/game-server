@@ -3,6 +3,7 @@ AppVersion: 1.1.0-alpha
 Server:
   Port: 3000
   Development: true
+  LogLevel: -1
 
 MongoDB:
   URI: "mongodb://mongo:27017"

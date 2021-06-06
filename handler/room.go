@@ -4,12 +4,12 @@ import (
 	"context"
 	"github.com/PulseyTeam/game-server/model"
 	pb "github.com/PulseyTeam/game-server/proto"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"io"
-	"log"
 	"time"
 )
 
@@ -26,7 +26,8 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 	if err == nil {
 		return &pb.RoomConnectResponse{RoomId: gameSession.ID.String()}, nil
 	} else {
-		log.Printf("find error: %v", err)
+		//Todo refactor
+		log.Warn().Msgf("find error: %v", err)
 	}
 
 	result, err := collection.InsertOne(ctx, model.GameSession{
@@ -42,7 +43,7 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 
 	insertedID := result.InsertedID.(primitive.ObjectID).String()
 
-	log.Printf("game session (created): %v", insertedID)
+	log.Trace().Msgf("game session (created): %v", insertedID)
 
 	return &pb.RoomConnectResponse{RoomId: insertedID}, nil
 }

@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package pulsey.protobuf;
-
 option go_package="./;proto";
 option csharp_namespace = "MultiplayerService";
 

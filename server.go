@@ -7,43 +7,81 @@ import (
 	"github.com/PulseyTeam/game-server/database"
 	"github.com/PulseyTeam/game-server/handler"
 	pb "github.com/PulseyTeam/game-server/proto"
+	"github.com/PulseyTeam/game-server/service"
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
-	"log"
 	"net"
+	"os"
+	"time"
+)
+
+const (
+	secretKey     = "pulsey-secret"
+	tokenDuration = 4 * time.Hour
 )
 
 func main() {
-	log.Println("starting server...")
+	consoleWriter := zerolog.ConsoleWriter{Out: os.Stderr}
+	consoleWriter.TimeFormat = time.RFC3339
+	log.Logger = zerolog.New(consoleWriter).With().Timestamp().Caller().Logger()
+
+	log.Info().Msg("starting server...")
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	cfg, err := config.ParseConfig()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Send()
 	}
+
+	zerolog.SetGlobalLevel(zerolog.Level(cfg.Server.LogLevel))
 
 	mongoDBConn, err := database.NewMongoDBConn(ctx, cfg)
 	if err != nil {
-		log.Fatalf("cannot connect mongodb: %v", err)
+		log.Fatal().Err(err).Send()
 	}
 	defer func() {
 		if err := mongoDBConn.Disconnect(ctx); err != nil {
-			log.Fatalf("mongodb disconnect: %v", err)
+			log.Fatal().Err(err).Send()
 		}
 	}()
-	log.Printf("mongodb connected: %v", mongoDBConn.NumberSessionsInProgress())
+	log.Info().Msgf("mongodb connected: %v", mongoDBConn.NumberSessionsInProgress())
 
-	grpcServer := grpc.NewServer()
-	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayer(cfg, mongoDBConn))
+	jwtManager := service.NewJWTManager(secretKey, tokenDuration)
+
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(unaryInterceptor), grpc.StreamInterceptor(streamInterceptor))
+	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayerHandler(cfg, mongoDBConn, jwtManager))
+	pb.RegisterAuthServiceServer(grpcServer, handler.NewAuthHandler(cfg, mongoDBConn, jwtManager))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.Server.Port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatal().Err(err).Send()
 	}
 
-	log.Printf("server started on port %v", cfg.Server.Port)
+	log.Info().Msgf("server started on port %v", cfg.Server.Port)
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Fatal().Err(err).Send()
 	}
+}
+
+func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+	now := time.Now()
+
+	defer func() {
+		log.Trace().Str("method", info.FullMethod).Msgf("request completed in %v", time.Since(now))
+	}()
+
+	return handler(ctx, req)
+}
+
+func streamInterceptor(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+	now := time.Now()
+
+	defer func() {
+		log.Trace().Str("method", info.FullMethod).Msgf("stream completed in %v", time.Since(now))
+	}()
+
+	return handler(srv, stream)
 }
