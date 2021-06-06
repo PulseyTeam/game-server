@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: game-server-app
-          image: pulsey-game-server:latest
-          imagePullPolicy: Never
+          image: gcr.io/PROJECT_ID/IMAGE:TAG
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           volumeMounts:
