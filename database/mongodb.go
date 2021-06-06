@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	connectTimeout  = 30 * time.Second
+	connectTimeout  = 10 * time.Second
 	maxConnIdleTime = 3 * time.Minute
 	minPoolSize     = 20
 	maxPoolSize     = 300
