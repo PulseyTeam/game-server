@@ -22,14 +22,14 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 		primitive.E{Key: "status", Value: model.SessionWaiting},
 	}
 
-	err := collection.FindOne(context.TODO(), filter).Decode(&gameSession)
+	err := collection.FindOne(ctx, filter).Decode(&gameSession)
 	if err == nil {
 		return &pb.RoomConnectResponse{RoomId: gameSession.ID.String()}, nil
 	} else {
 		log.Printf("find error: %v", err)
 	}
 
-	result, err := collection.InsertOne(context.TODO(), model.GameSession{
+	result, err := collection.InsertOne(ctx, model.GameSession{
 		ID:         primitive.NewObjectID(),
 		MapID:      request.GetMapId(),
 		Status:     model.SessionWaiting,
@@ -49,7 +49,7 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 
 func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamServer) error {
 	if h.rooms == nil {
-		h.rooms = make(map[string]*pb.RoomStreamRequest)
+		h.rooms = make(map[string]map[string]*pb.Player)
 	}
 
 	for {
@@ -61,17 +61,15 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 			return err
 		}
 
-		h.rooms[request.GetRoomId()] = &pb.RoomStreamRequest{
-			Player: request.GetPlayer(),
-			RoomId: request.GetRoomId(),
+		if h.rooms[request.GetRoomId()] == nil {
+			h.rooms[request.GetRoomId()] = make(map[string]*pb.Player)
 		}
 
-		currentPlayers := make([]*pb.Player, 0, len(h.rooms))
-		for _, player := range h.rooms {
-			if player.GetRoomId() != request.GetRoomId() {
-				continue
-			}
-			currentPlayers = append(currentPlayers, player.GetPlayer())
+		h.rooms[request.GetRoomId()][request.GetPlayer().GetId()] = request.GetPlayer()
+
+		currentPlayers := make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
+		for _, player := range h.rooms[request.GetRoomId()] {
+			currentPlayers = append(currentPlayers, player)
 		}
 
 		err = stream.Send(&pb.RoomStreamResponse{Players: currentPlayers})

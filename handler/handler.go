@@ -8,7 +8,7 @@ import (
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms   map[string]*pb.RoomStreamRequest
+	rooms   map[string]map[string]*pb.Player
 	mongoDB *mongo.Client
 	cfg     *config.Config
 }
