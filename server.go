@@ -35,7 +35,7 @@ func main() {
 	log.Printf("mongodb connected: %v", mongoDBConn.NumberSessionsInProgress())
 
 	grpcServer := grpc.NewServer()
-	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayer())
+	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayer(cfg, mongoDBConn))
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", cfg.Server.Port))
 	if err != nil {
