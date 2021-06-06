@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-server-config
+data:
+  config.yaml: |
+    AppVersion: 1.1.0-alpha
+    Server:
+      Port: 3000
+      Development: true
+    MongoDB:
+      URI: "mongodb://localhost:27017"
+      User: "admin"
+      Password: "admin"
+      DB: "pulsey-db"

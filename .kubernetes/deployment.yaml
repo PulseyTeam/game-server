@@ -14,10 +14,13 @@ spec:
     spec:
       containers:
         - name: game-server-app
-          image: gcr.io/PROJECT_ID/IMAGE:TAG
-          imagePullPolicy: Always
+          image: pulsey-game-server:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - name: configmap-volume
+              mountPath: /app/config
           readinessProbe:
             tcpSocket:
               port: 3000
@@ -28,3 +31,7 @@ spec:
               port: 3000
             initialDelaySeconds: 3
             periodSeconds: 5
+      volumes:
+        - name: configmap-volume
+          configMap:
+            name: game-server-config
