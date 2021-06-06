@@ -4,7 +4,10 @@ on: [push, pull_request]
 
 jobs:
   test:
+    name: Test
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
       - uses: actions/checkout@v2
 
