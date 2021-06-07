@@ -3,7 +3,7 @@ module github.com/PulseyTeam/game-server
 go 1.16
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/rs/zerolog v1.22.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0

@@ -21,7 +21,6 @@ func main() {
 		zerolog.LevelFieldName = "severity"
 		zerolog.TimestampFieldName = "timestamp"
 		zerolog.TimeFieldFormat = time.RFC3339Nano
-		log.Logger = log.With().Logger()
 	} else {
 		consoleWriter := zerolog.ConsoleWriter{Out: os.Stderr}
 		consoleWriter.TimeFormat = time.RFC3339
@@ -72,7 +71,7 @@ func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServ
 	now := time.Now()
 
 	defer func() {
-		log.Trace().Str("method", info.FullMethod).Msgf("request completed in %v", time.Since(now))
+		log.Trace().Str("requestUrl", info.FullMethod).Str("latency", fmt.Sprintf("%v", time.Since(now))).Msgf("request completed")
 	}()
 
 	return handler(ctx, req)
@@ -82,7 +81,7 @@ func streamInterceptor(srv interface{}, stream grpc.ServerStream, info *grpc.Str
 	now := time.Now()
 
 	defer func() {
-		log.Trace().Str("method", info.FullMethod).Msgf("stream completed in %v", time.Since(now))
+		log.Trace().Str("requestUrl", info.FullMethod).Str("latency", fmt.Sprintf("%v", time.Since(now))).Msgf("stream completed")
 	}()
 
 	return handler(srv, stream)
