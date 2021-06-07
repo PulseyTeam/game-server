@@ -6,6 +6,7 @@ import (
 	"github.com/PulseyTeam/game-server/config"
 	"github.com/PulseyTeam/game-server/database"
 	"github.com/PulseyTeam/game-server/handler"
+	"github.com/PulseyTeam/game-server/interceptor"
 	"github.com/PulseyTeam/game-server/jwt"
 	pb "github.com/PulseyTeam/game-server/proto"
 	"github.com/rs/zerolog"
@@ -52,7 +53,7 @@ func main() {
 
 	jwtManager := jwt.NewManager()
 
-	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(unaryInterceptor), grpc.StreamInterceptor(streamInterceptor))
+	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(interceptor.Unary), grpc.StreamInterceptor(interceptor.Stream))
 	pb.RegisterMultiplayerServiceServer(grpcServer, handler.NewMultiplayerHandler(cfg, mongoDBConn, jwtManager))
 	pb.RegisterAuthServiceServer(grpcServer, handler.NewAuthHandler(cfg, mongoDBConn, jwtManager))
 
@@ -65,24 +66,4 @@ func main() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatal().Err(err).Send()
 	}
-}
-
-func unaryInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
-	now := time.Now()
-
-	defer func() {
-		log.Trace().Str("requestUrl", info.FullMethod).Str("latency", fmt.Sprintf("%v", time.Since(now))).Msgf("request completed")
-	}()
-
-	return handler(ctx, req)
-}
-
-func streamInterceptor(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
-	now := time.Now()
-
-	defer func() {
-		log.Trace().Str("requestUrl", info.FullMethod).Str("latency", fmt.Sprintf("%v", time.Since(now))).Msgf("stream completed")
-	}()
-
-	return handler(srv, stream)
 }
