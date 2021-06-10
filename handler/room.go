@@ -73,7 +73,9 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 			log.Trace().Msg(request.String())
 		}
 
+		h.roomsMapMutex.Lock()
 		h.rooms[request.GetRoomId()][request.GetPlayer().GetId()] = request.GetPlayer()
+		h.roomsMapMutex.Unlock()
 
 		currentPlayers := make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
 		if len(h.rooms[request.GetRoomId()]) > 2 {

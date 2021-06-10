@@ -5,14 +5,16 @@ import (
 	"github.com/PulseyTeam/game-server/jwt"
 	pb "github.com/PulseyTeam/game-server/proto"
 	"go.mongodb.org/mongo-driver/mongo"
+	"sync"
 )
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms      map[string]map[string]*pb.Player
-	jwtManager *jwt.Manager
-	mongoDB    *mongo.Client
-	cfg        *config.Config
+	rooms         map[string]map[string]*pb.Player
+	roomsMapMutex sync.RWMutex
+	jwtManager    *jwt.Manager
+	mongoDB       *mongo.Client
+	cfg           *config.Config
 }
 
 type AuthHandler struct {
