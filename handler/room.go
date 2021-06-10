@@ -79,9 +79,11 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 
 		currentPlayers := make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
 		if len(h.rooms[request.GetRoomId()]) > 2 {
+			h.currentPlayersMutex.Lock()
 			for _, player := range h.rooms[request.GetRoomId()] {
 				currentPlayers = append(currentPlayers, player)
 			}
+			h.currentPlayersMutex.Unlock()
 		}
 
 		err = stream.Send(&pb.RoomStreamResponse{Players: currentPlayers})

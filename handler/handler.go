@@ -10,11 +10,12 @@ import (
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms         map[string]map[string]*pb.Player
-	roomsMapMutex sync.RWMutex
-	jwtManager    *jwt.Manager
-	mongoDB       *mongo.Client
-	cfg           *config.Config
+	rooms               map[string]map[string]*pb.Player
+	roomsMapMutex       sync.RWMutex
+	currentPlayersMutex sync.RWMutex
+	jwtManager          *jwt.Manager
+	mongoDB             *mongo.Client
+	cfg                 *config.Config
 }
 
 type AuthHandler struct {
