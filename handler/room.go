@@ -69,8 +69,10 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 		h.rooms[request.GetRoomId()][request.GetPlayer().GetId()] = request.GetPlayer()
 
 		currentPlayers := make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
-		for _, player := range h.rooms[request.GetRoomId()] {
-			currentPlayers = append(currentPlayers, player)
+		if len(h.rooms[request.GetRoomId()]) > 2 {
+			for _, player := range h.rooms[request.GetRoomId()] {
+				currentPlayers = append(currentPlayers, player)
+			}
 		}
 
 		err = stream.Send(&pb.RoomStreamResponse{Players: currentPlayers})
