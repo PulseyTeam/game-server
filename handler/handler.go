@@ -10,7 +10,7 @@ import (
 
 type MultiplayerHandler struct {
 	pb.UnimplementedMultiplayerServiceServer
-	rooms               map[string]map[string]*pb.Player
+	rooms               map[string][]*pb.Player
 	roomsMapMutex       sync.RWMutex
 	currentPlayersMutex sync.RWMutex
 	jwtManager          *jwt.Manager

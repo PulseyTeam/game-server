@@ -50,7 +50,7 @@ func (h *MultiplayerHandler) RoomConnect(ctx context.Context, request *pb.RoomCo
 
 func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamServer) error {
 	if h.rooms == nil {
-		h.rooms = make(map[string]map[string]*pb.Player)
+		h.rooms = make(map[string][]*pb.Player)
 	}
 
 	var currentTick int64 = 0
@@ -64,29 +64,26 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 			return err
 		}
 
-		if h.rooms[request.GetRoomId()] == nil {
-			h.rooms[request.GetRoomId()] = make(map[string]*pb.Player)
-		}
-
 		currentTick++
 		if currentTick%32 == 0 {
 			log.Trace().Msg(request.String())
 		}
 
 		h.roomsMapMutex.Lock()
-		h.rooms[request.GetRoomId()][request.GetPlayer().GetId()] = request.GetPlayer()
+		addedKey := -1
+		for key, player := range h.rooms[request.GetRoomId()] {
+			if player.GetId() == request.GetPlayer().GetId() {
+				addedKey = key
+			}
+		}
+		if addedKey == -1 {
+			h.rooms[request.GetRoomId()] = append(h.rooms[request.GetRoomId()], request.GetPlayer())
+		} else {
+			h.rooms[request.GetRoomId()][addedKey] = request.GetPlayer()
+		}
 		h.roomsMapMutex.Unlock()
 
-		currentPlayers := make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
-		if len(h.rooms[request.GetRoomId()]) > 2 {
-			h.currentPlayersMutex.Lock()
-			for _, player := range h.rooms[request.GetRoomId()] {
-				currentPlayers = append(currentPlayers, player)
-			}
-			h.currentPlayersMutex.Unlock()
-		}
-
-		err = stream.Send(&pb.RoomStreamResponse{Players: currentPlayers})
+		err = stream.Send(&pb.RoomStreamResponse{Players: h.rooms[request.GetRoomId()]})
 		if err != nil {
 			if err == io.EOF {
 				break
