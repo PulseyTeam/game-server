@@ -81,9 +81,13 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 		} else {
 			h.rooms[request.GetRoomId()][addedKey] = request.GetPlayer()
 		}
+		currentPlayers := h.rooms[request.GetRoomId()]
+		if len(h.rooms[request.GetRoomId()]) < 2 {
+			currentPlayers = make([]*pb.Player, 0, len(h.rooms[request.GetRoomId()]))
+		}
 		h.roomsMapMutex.Unlock()
 
-		err = stream.Send(&pb.RoomStreamResponse{Players: h.rooms[request.GetRoomId()]})
+		err = stream.Send(&pb.RoomStreamResponse{Players: currentPlayers})
 		if err != nil {
 			if err == io.EOF {
 				break
