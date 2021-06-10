@@ -53,6 +53,8 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 		h.rooms = make(map[string]map[string]*pb.Player)
 	}
 
+	var currentTick int64 = 0
+
 	for {
 		request, err := stream.Recv()
 		if err != nil {
@@ -64,6 +66,11 @@ func (h *MultiplayerHandler) RoomStream(stream pb.MultiplayerService_RoomStreamS
 
 		if h.rooms[request.GetRoomId()] == nil {
 			h.rooms[request.GetRoomId()] = make(map[string]*pb.Player)
+		}
+
+		currentTick++
+		if currentTick%32 == 0 {
+			log.Trace().Msg(request.String())
 		}
 
 		h.rooms[request.GetRoomId()][request.GetPlayer().GetId()] = request.GetPlayer()
